@@ -29,7 +29,7 @@ def get_openai_response(input_text: str):
     )
 
 
-def get_ollama_response(input_text: str):
+def get_ollama_response(input_text1: str):
     """
     Get the llama2 response for the given prompt.
 
@@ -47,7 +47,7 @@ def get_ollama_response(input_text: str):
     logging.info("Getting llama2 response for the prompt")
 
     response = requests.post(
-        "http://localhost:8000/poem/invoke", json={"input": {"topic": input_text}}
+        "http://localhost:8000/poem/invoke", json={"input": {"topic": input_text1}}
     )
 
 
