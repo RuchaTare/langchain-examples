@@ -12,11 +12,20 @@ import os
 from langchain_community.llms import Ollama
 from dotenv import load_dotenv
 
-load_dotenv()
-
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
 )
+
+
+def load_env():
+    """
+    Load the environment variables.
+    """
+
+    logging.info("Loading the environment variables")
+
+    load_dotenv()
+    api_key = os.getenv("OPENAI_API_KEY")
 
 
 def create_api() -> FastAPI:
@@ -49,7 +58,8 @@ def create_models():
     logging.info("Creating OpenAI and llama2 models instances")
 
     openai_model = ChatOpenAI()
-    llm_model = Ollama(model="llama2")
+    llm_model = Ollama(model="llama3")
+
     return openai_model, llm_model
 
 
