@@ -27,6 +27,7 @@ def get_openai_response(input_text: str):
     response = requests.post(
         "http://localhost:8000/essay/invoke", json={"input": {"topic": input_text}}
     )
+    return response.json()["output"]
 
 
 def get_ollama_response(input_text1: str):
@@ -49,6 +50,7 @@ def get_ollama_response(input_text1: str):
     response = requests.post(
         "http://localhost:8000/poem/invoke", json={"input": {"topic": input_text1}}
     )
+    return response.json()["output"]
 
 
 def setup_streamlit():

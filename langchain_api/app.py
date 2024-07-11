@@ -13,6 +13,7 @@ from langchain_community.llms import Ollama
 from dotenv import load_dotenv
 
 load_dotenv()
+
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(funcName)s - %(levelname)s - %(message)s"
 )
@@ -31,6 +32,7 @@ def create_api() -> FastAPI:
     logging.info("Creating FastAPI instance")
 
     api = FastAPI(title="Langchain API Server", version="1.0", description="Test server ")
+
     return api
 
 
@@ -92,6 +94,8 @@ def main():
     openai_model, llm_model = create_models()
 
     setup_routes(api, openai_model, llm_model)
+
+    uvicorn.run(api, host="localhost", port=8000)
 
 
 if __name__ == "__main__":
