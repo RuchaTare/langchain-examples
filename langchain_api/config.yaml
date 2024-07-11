@@ -1,0 +1,3 @@
+# Config file for api calling using langchain.
+
+model_name : openai

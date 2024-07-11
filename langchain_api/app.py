@@ -3,6 +3,7 @@ Utility to run the API server for the Langchain project using FastAPI, that serv
 """
 
 import logging
+import yaml
 from fastapi import FastAPI
 from langchain.prompts import ChatPromptTemplate
 from langchain_community.chat_models import ChatOpenAI
@@ -45,7 +46,7 @@ def create_api() -> FastAPI:
     return api
 
 
-def create_models():
+def create_models(model_name: str = "llama3"):
     """
     Create the OpenAI and llama2 models instances.
 
@@ -57,13 +58,17 @@ def create_models():
 
     logging.info("Creating OpenAI and llama2 models instances")
 
-    openai_model = ChatOpenAI()
-    llm_model = Ollama(model="llama3")
+    if model_name == "openai":
+        model = ChatOpenAI()
+    elif model_name == "llama3":
+        model = Ollama(model="llama3")
+    else:
+        raise ValueError(f"Invalid model")
 
-    return openai_model, llm_model
+    return model
 
 
-def setup_routes(api: FastAPI, openai_model: ChatOpenAI, llm_model: Ollama):
+def setup_routes(api: FastAPI, model):
     """
     Setup the routes for the API server, using the OpenAI and llama2 models , prompts and api
 
@@ -79,13 +84,11 @@ def setup_routes(api: FastAPI, openai_model: ChatOpenAI, llm_model: Ollama):
 
     logging.info("Setting up routes for the API server")
 
-    prompt1 = ChatPromptTemplate.from_template(
+    prompt = ChatPromptTemplate.from_template(
         "Explain the concept {topic} with 5 bullet points only "
     )
-    prompt2 = ChatPromptTemplate.from_template("Write me an essay about {topic} using 500 words.")
 
-    add_routes(api, prompt1 | openai_model, path="/essay")
-    add_routes(api, prompt2 | llm_model, path="/poem")
+    add_routes(api, prompt | model, path="/essay")
 
 
 def main():
@@ -99,11 +102,16 @@ def main():
 
     logging.info("Running the utility to run the API server for the Langchain project")
 
+    with open("./langchain_api/config.yaml") as file:
+        config_data = yaml.safe_load(file)
+
+    load_env()
+
     api = create_api()
 
-    openai_model, llm_model = create_models()
+    model = create_models(config_data["model_name"])
 
-    setup_routes(api, openai_model, llm_model)
+    setup_routes(api, model)
 
     uvicorn.run(api, host="localhost", port=8000)
 
