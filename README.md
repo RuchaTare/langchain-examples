@@ -15,3 +15,8 @@ For others see how to guide : https://python.langchain.com/v0.2/docs/how_to/
 - Text splitter
 - Vector DB - chroma provided by langchain
 
+    - Multi search RAG :
+        ○ Tools - Third party
+        ○ Agents
+    - End to End Projects:
+Groq - Inference engine
